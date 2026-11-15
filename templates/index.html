@@ -1,0 +1,540 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#8065dc">
+  <title>MindCare AI | Mental Wellness Companion</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="app-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">MindCare <span>AI</span></div>
+
+        <button type="button" id="new-chat" class="primary-button" data-i18n="newChat">＋ New Chat</button>
+
+        <button type="button" id="sidebar-dashboard" class="nav-button" data-i18n="dashboard">📊 Dashboard</button>
+
+        <button type="button" id="sidebar-journal" class="nav-button" data-i18n="journal">📔 Journal</button>
+
+        <button type="button" id="sidebar-exercises" class="nav-button" data-i18n="exercises">
+          🌿 Wellness Exercises
+        </button>
+
+        <button type="button" id="sidebar-voice-chat" class="nav-button">
+          🎙️ Voice Chat
+        </button>
+
+        <button type="button" id="sidebar-about" class="nav-button about-nav-link">
+          ℹ️ About Us
+        </button>
+      </div>
+
+      <h3 data-i18n="previousChats">Previous Chats</h3>
+
+      <div id="chat-list">
+        <p class="muted">No previous chats yet.</p>
+      </div>
+
+      <p class="sidebar-note" data-i18n="localNote">
+        Your conversations and entries are saved locally on this computer.
+      </p>
+    </aside>
+
+    <main class="container">
+
+      <header class="top-bar">
+        <div>
+          <div class="brand">MindCare <span>AI</span></div>
+          <p id="page-subtitle" data-i18n="subtitle">
+            Your friendly mental wellness companion
+          </p>
+        </div>
+
+        <div class="header-actions">
+
+          <button type="button" id="dashboard-button" class="dashboard-button" data-i18n="dashboard">
+            📊 Dashboard
+          </button>
+
+          <button type="button" id="back-to-chat" class="dashboard-button" hidden data-i18n="backToChat">
+            ← Back to Chat
+          </button>
+
+          <label class="language-control" for="language-select">
+            <span>🌐</span>
+            <select id="language-select" aria-label="Interface language">
+              <option value="en">English</option>
+              <option value="hi">हिन्दी</option>
+            </select>
+          </label>
+
+          <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch theme">
+            🌙
+          </button>
+
+          <div class="account-info">
+            <div class="account-avatar">
+              {{ session.get('user_name', 'U')[0]|upper }}
+            </div>
+            <div class="account-details">
+              <strong>{{ session.get('user_name', 'User') }}</strong>
+              <small>My Account</small>
+            </div>
+          </div>
+
+          <form method="POST" action="{{ url_for('logout') }}" class="logout-form">
+            <button type="submit" class="logout-button">
+              <span>Log Out</span>
+              ↗
+            </button>
+          </form>
+
+        </div>
+      </header>
+
+      <!-- CHAT VIEW -->
+      <section id="chat-view" class="view">
+
+        <section class="notice" data-i18n="safetyNotice">
+          💜 MindCare AI is a student wellness prototype, not a medical service.
+          If you are in immediate danger, contact local emergency services
+          or someone you trust.
+        </section>
+
+        <section class="chat-card">
+          <div class="chat-heading">
+            <div class="bot-avatar">✦</div>
+            <div>
+              <h2 data-i18n="assistantTitle">MindCare Assistant</h2>
+              <p>
+                <span class="online-dot"></span>
+                <span data-i18n="hereToListen">Here to listen</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="chat-divider"></div>
+          <div id="messages" aria-live="polite"></div>
+
+          <form id="chat-form">
+            <textarea id="message" rows="2"
+              placeholder="Share what's on your mind... English or हिंदी"
+              required></textarea>
+            <button type="submit" id="send" data-i18n="send">Send ➤</button>
+          </form>
+
+          <div class="tools">
+            <button type="button" id="breathe" data-i18n="breathing">🌿 Breathing Exercise</button>
+            <button type="button" id="speak" data-i18n="readReply">🔊 Read Last Reply</button>
+            <button type="button" id="open-exercises" data-i18n="moreExercises">✨ More Exercises</button>
+          </div>
+
+          <p id="status" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="daily-card">
+          <div class="daily-icon">☀️</div>
+          <div>
+            <span class="eyebrow" data-i18n="dailyThought">A THOUGHT FOR TODAY</span>
+            <p id="daily-motivation">Small steps still move you forward.</p>
+          </div>
+        </section>
+
+        <footer>
+          <p>MindCare AI · College Project Prototype</p>
+          <p data-i18n="footerLine">Take a moment for yourself. You matter. 💜</p>
+        </footer>
+      </section>
+
+      <!-- DASHBOARD VIEW -->
+      <section id="dashboard-view" class="view" hidden>
+
+        <div class="dashboard-welcome">
+          <div>
+            <span class="eyebrow" data-i18n="wellnessSpace">YOUR WELLNESS SPACE</span>
+            <h1 data-i18n="dashboardTitle">Your Mental Wellness Dashboard 💜</h1>
+            <p data-i18n="dashboardIntro">Notice your feelings, reflect on your journey, and take one small step at a time.</p>
+          </div>
+          <span class="dashboard-leaf">🌿</span>
+        </div>
+
+        <section class="dashboard-card mood-card">
+          <div class="dashboard-card-heading">
+            <div>
+              <span class="eyebrow" data-i18n="dailyCheckin">DAILY CHECK-IN</span>
+              <h2 data-i18n="howFeeling">How are you feeling today?</h2>
+              <p data-i18n="moodPrompt">Choose the mood that best describes how you feel right now.</p>
+            </div>
+            <span>💗</span>
+          </div>
+
+          <div class="mood-options">
+            <button type="button" class="mood-option" data-score="1"><span>😢</span><small data-i18n="veryLow">Very Low</small></button>
+            <button type="button" class="mood-option" data-score="2"><span>😟</span><small data-i18n="low">Low</small></button>
+            <button type="button" class="mood-option" data-score="3"><span>😐</span><small data-i18n="okay">Okay</small></button>
+            <button type="button" class="mood-option" data-score="4"><span>🙂</span><small data-i18n="good">Good</small></button>
+            <button type="button" class="mood-option" data-score="5"><span>😄</span><small data-i18n="great">Great</small></button>
+          </div>
+
+          <label class="field-label" for="mood-note" data-i18n="moodNoteLabel">Want to share more about your feelings? (Optional)</label>
+          <textarea id="mood-note" rows="3" maxlength="1000" placeholder="Write a little about your day..."></textarea>
+
+          <div class="inline-actions">
+            <button type="button" id="save-mood" class="primary-button" data-i18n="saveMood">Save Today's Mood 💜</button>
+            <p id="mood-status" role="status"></p>
+          </div>
+        </section>
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow" data-i18n="yourProgress">YOUR PROGRESS</span>
+            <h2 data-i18n="moodOverview">Your Mood Overview</h2>
+          </div>
+          <label class="month-picker-label">
+            <span data-i18n="selectMonth">Month</span>
+            <input type="month" id="analytics-month">
+          </label>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span class="stat-icon">📅</span>
+            <p data-i18n="totalCheckins">Total check-ins</p>
+            <h2 id="total-checkins">0</h2>
+            <small data-i18n="monthEntries">Entries this month</small>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon">💜</span>
+            <p data-i18n="averageMood">Average mood</p>
+            <h2 id="average-mood">—</h2>
+            <small id="average-label">Not enough data yet</small>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon">🌟</span>
+            <p data-i18n="mostCommon">Most common mood</p>
+            <h2 id="most-common-mood">—</h2>
+            <small id="monthly-change">Compared with previous month</small>
+          </article>
+        </div>
+
+        <section class="dashboard-card">
+          <div class="dashboard-card-heading">
+            <div>
+              <span class="eyebrow" data-i18n="monthAtGlance">MONTH AT A GLANCE</span>
+              <h2 data-i18n="moodCalendar">Mood Calendar</h2>
+              <p data-i18n="calendarHelp">Select a day to see the mood entries recorded for it.</p>
+            </div>
+            <span>🗓️</span>
+          </div>
+
+          <div class="calendar-toolbar">
+            <button type="button" id="calendar-prev" aria-label="Previous month">←</button>
+            <h3 id="calendar-title"></h3>
+            <button type="button" id="calendar-next" aria-label="Next month">→</button>
+          </div>
+          <div class="calendar-grid" id="mood-calendar"></div>
+          <div class="calendar-legend">
+            <span><i class="mood-dot score-1"></i>Very low</span>
+            <span><i class="mood-dot score-2"></i>Low</span>
+            <span><i class="mood-dot score-3"></i>Okay</span>
+            <span><i class="mood-dot score-4"></i>Good</span>
+            <span><i class="mood-dot score-5"></i>Great</span>
+          </div>
+          <div id="calendar-day-detail" class="calendar-day-detail" aria-live="polite">Choose a day to view its check-ins.</div>
+        </section>
+
+        <section class="dashboard-card">
+          <div class="dashboard-card-heading">
+            <div>
+              <span class="eyebrow" data-i18n="patterns">PATTERNS</span>
+              <h2 data-i18n="monthlyAnalytics">Monthly Analytics</h2>
+              <p data-i18n="distributionHelp">How often each mood was recorded this month.</p>
+            </div>
+            <span>📊</span>
+          </div>
+          <div id="monthly-chart" class="monthly-chart"></div>
+          <div id="monthly-summary" class="monthly-summary"></div>
+        </section>
+
+        <section class="dashboard-card">
+          <div class="dashboard-card-heading">
+            <div>
+              <h2 data-i18n="weeklyMood">Weekly Mood Overview</h2>
+              <p data-i18n="weeklyHelp">Your average mood for each of the last seven days.</p>
+            </div>
+            <span>📈</span>
+          </div>
+          <div id="weekly-chart" class="weekly-chart"></div>
+          <div class="chart-legend"><span>1 = Very Low</span><span>5 = Great</span></div>
+        </section>
+
+        <section class="dashboard-card mood-history-card">
+          <div class="dashboard-card-heading">
+            <div>
+              <h2 data-i18n="recentHistory">Recent Mood History</h2>
+              <p data-i18n="latestCheckins">Your latest saved check-ins.</p>
+            </div>
+            <span>📝</span>
+          </div>
+          <div id="mood-history"><p>No mood records yet.</p></div>
+        </section>
+
+        <footer>
+          <p>MindCare AI · <span data-i18n="kindReminder">Progress isn't always linear. Be kind to yourself. 💜</span></p>
+        </footer>
+      </section>
+
+      <!-- JOURNAL VIEW -->
+      <section id="journal-view" class="view" hidden>
+        <div class="dashboard-welcome">
+          <div>
+            <span class="eyebrow" data-i18n="privateReflection">PRIVATE REFLECTION</span>
+            <h1 data-i18n="journalTitle">Your Personal Journal 📔</h1>
+            <p data-i18n="journalIntro">A place to put your thoughts into words, without judgment.</p>
+          </div>
+          <span class="dashboard-leaf">✍️</span>
+        </div>
+
+        <section class="dashboard-card journal-editor">
+          <h2 data-i18n="newEntry">Write a journal entry</h2>
+          <label class="field-label" for="journal-title" data-i18n="entryTitle">Entry title</label>
+          <input id="journal-title" type="text" maxlength="100" placeholder="A title for today...">
+          <label class="field-label" for="journal-content" data-i18n="yourThoughts">Your thoughts</label>
+          <textarea id="journal-content" rows="8" maxlength="10000" placeholder="Write freely. What happened today? How did it make you feel?"></textarea>
+          <div class="inline-actions">
+            <button id="save-journal" class="primary-button" type="button" data-i18n="saveEntry">Save Entry</button>
+            <p id="journal-status" role="status"></p>
+          </div>
+          <p class="privacy-hint" data-i18n="journalPrivacy">Your journal entries are private to your account and are not visible to other users.</p>
+        </section>
+
+        <section class="dashboard-card">
+          <div class="dashboard-card-heading">
+            <div>
+              <h2 data-i18n="pastEntries">Previous Entries</h2>
+              <p data-i18n="journalHistory">Your saved reflections.</p>
+            </div>
+            <span>📚</span>
+          </div>
+          <div id="journal-list" class="journal-list"><p>No journal entries yet.</p></div>
+        </section>
+      </section>
+
+      <!-- WELLNESS EXERCISES VIEW -->
+      <section id="exercises-view" class="view" hidden>
+        <div class="dashboard-welcome">
+          <div>
+            <span class="eyebrow" data-i18n="takeBreath">PAUSE AND RESET</span>
+            <h1 data-i18n="exerciseTitle">Wellness Exercises 🌿</h1>
+            <p data-i18n="exerciseIntro">Choose a gentle activity. Stop if anything feels uncomfortable.</p>
+          </div>
+          <span class="dashboard-leaf">🧘</span>
+        </div>
+
+        <div class="exercise-grid">
+          <article class="exercise-card">
+            <div class="exercise-art">🌬️</div>
+            <h2 data-i18n="boxBreathing">Calm Breathing</h2>
+            <p data-i18n="boxBreathingDesc">Follow a gentle breathing rhythm: breathe in, pause, breathe out, pause.</p>
+            <button type="button" class="exercise-start" data-exercise="breathing" data-i18n="startExercise">Start exercise</button>
+          </article>
+          <article class="exercise-card">
+            <div class="exercise-art">🖐️</div>
+            <h2 data-i18n="grounding">5-4-3-2-1 Grounding</h2>
+            <p data-i18n="groundingDesc">Bring attention to your surroundings through your five senses.</p>
+            <button type="button" class="exercise-start" data-exercise="grounding" data-i18n="startExercise">Start exercise</button>
+          </article>
+          <article class="exercise-card">
+            <div class="exercise-art">💭</div>
+            <h2 data-i18n="mindfulPause">Mindful Pause</h2>
+            <p data-i18n="mindfulDesc">Take a short pause to notice your body, thoughts and surroundings.</p>
+            <button type="button" class="exercise-start" data-exercise="mindful" data-i18n="startExercise">Start exercise</button>
+          </article>
+        </div>
+
+        <section class="dashboard-card exercise-stage" id="exercise-stage">
+          <div class="dashboard-card-heading">
+            <div>
+              <h2 id="exercise-stage-title" data-i18n="chooseExercise">Choose an exercise</h2>
+              <p id="exercise-instruction" data-i18n="exerciseStageHint">Your guided instructions will appear here.</p>
+            </div>
+            <span>💜</span>
+          </div>
+          <div class="breathing-orb" id="breathing-orb">Breathe</div>
+          <div class="exercise-controls">
+            <button type="button" id="exercise-next" class="primary-button" hidden data-i18n="nextStep">Next step</button>
+            <button type="button" id="exercise-stop" class="secondary-button" hidden data-i18n="finishExercise">Finish</button>
+          </div>
+          <p id="exercise-progress" class="muted"></p>
+        </section>
+      </section>
+
+      <!-- VOICE CHAT VIEW -->
+      <section id="voice-view" class="view" hidden>
+        <section class="notice">
+          💜 MindCare AI is a wellness companion, not a medical service.
+          It cannot replace a qualified mental health professional.
+          If you are in immediate danger, contact local emergency services or someone you trust.
+        </section>
+
+        <section class="voice-card">
+          <div class="voice-orb" id="voice-orb">🎤</div>
+          <h1 id="voice-title">Talk to MindCare</h1>
+          <p id="voice-description">Speak naturally in Hindi. MindCare will listen and reply aloud.</p>
+          <p id="voice-status" role="status" aria-live="polite">Ready when you are.</p>
+
+          <div class="voice-language-options">
+            <button type="button" id="voice-english" class="voice-language-btn active">🇬🇧 Speak English</button>
+            <button type="button" id="voice-hindi" class="voice-language-btn">🇮🇳 हिंदी में बोलें</button>
+          </div>
+
+          <button type="button" id="voice-toggle" class="primary-button">Start talking</button>
+          <p class="voice-hint">Tap the button again to stop the conversation.</p>
+          <p class="voice-privacy">Your voice conversation is saved in your app's chat history. No transcript is displayed on this page.</p>
+        </section>
+
+        <footer>
+          <p>MindCare AI · Voice Conversation</p>
+          <p>Take a moment for yourself. You matter. 💜</p>
+        </footer>
+      </section>
+
+      <!-- ABOUT US VIEW: SAME APP SHELL AND THEME -->
+      <section id="about-view" class="view" hidden>
+        <div class="about-page">
+
+          <section class="about-hero">
+            <span class="eyebrow">GET TO KNOW US</span>
+            <h1>About MindCare AI 💜</h1>
+            <p>A friendly mental wellness companion designed to encourage emotional awareness, self-reflection, and positive habits.</p>
+          </section>
+
+          <section class="about-two-columns">
+            <article class="about-info-card">
+              <h2>🌿 Our Mission</h2>
+              <p>Our mission is to make everyday emotional support and wellness tools easier to access. We want to encourage people to express their feelings, reflect on their experiences, and take small steps towards their well-being.</p>
+            </article>
+
+            <article class="about-info-card">
+              <h2>✨ Our Vision</h2>
+              <p>We envision a world where conversations about mental wellness feel more comfortable and accessible, and where everyone feels encouraged to take care of their emotional well-being.</p>
+            </article>
+          </section>
+
+          <section class="about-section">
+            <span class="eyebrow">WHAT WE OFFER</span>
+            <h2>Features of MindCare AI</h2>
+
+            <div class="about-features-grid">
+              <article class="about-feature">
+                <span>💬</span>
+                <h3>AI Wellness Chat</h3>
+                <p>Chat with an AI companion that offers supportive conversations and helpful reflections.</p>
+              </article>
+              <article class="about-feature">
+                <span>🎙️</span>
+                <h3>Voice Chat</h3>
+                <p>Communicate through voice in English or Hindi.</p>
+              </article>
+              <article class="about-feature">
+                <span>📊</span>
+                <h3>Mood Tracking</h3>
+                <p>Record your daily moods and observe your emotional patterns over time.</p>
+              </article>
+              <article class="about-feature">
+                <span>📔</span>
+                <h3>Personal Journal</h3>
+                <p>Write down your thoughts and keep your personal reflections in one place.</p>
+              </article>
+              <article class="about-feature">
+                <span>🌬️</span>
+                <h3>Wellness Exercises</h3>
+                <p>Explore breathing, grounding, and mindfulness activities.</p>
+              </article>
+              <article class="about-feature">
+                <span>🔐</span>
+                <h3>Personal Accounts</h3>
+                <p>Each registered user has their own account and separate personal records.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="about-section about-how">
+            <span class="eyebrow">OUR TECHNOLOGY</span>
+            <h2>How MindCare AI Works</h2>
+            <p>MindCare AI combines a Flask-powered web application, an AI language model, and an SQLite database to provide interactive wellness features.</p>
+            <div class="about-tech-list">
+              <span>Python</span>
+              <span>Flask</span>
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
+              <span>SQLite</span>
+              <span>Ollama AI</span>
+            </div>
+          </section>
+
+          <section class="about-section">
+            <span class="eyebrow">THE PEOPLE BEHIND THE PROJECT</span>
+            <h2>Meet Our Team 💜</h2>
+            <p>The team working together to bring MindCare AI to life.</p>
+
+            <div class="about-team-grid">
+              <article class="about-team-card">
+                <div class="team-avatar">A</div>
+                <h3>Ayush</h3>
+                <p>Project Lead &amp; Backend Developer</p>
+              </article>
+              <article class="about-team-card">
+                <div class="team-avatar">A</div>
+                <h3>Anushka</h3>
+                <p>UI/UX &amp; Frontend Developer</p>
+              </article>
+              <article class="about-team-card">
+                <div class="team-avatar">P</div>
+                <h3>Prachi</h3>
+                <p>AI Integration &amp; Chatbot Developer</p>
+              </article>
+              <article class="about-team-card">
+                <div class="team-avatar">P</div>
+                <h3>Poornima</h3>
+                <p>Database &amp; Authentication Developer</p>
+              </article>
+              <article class="about-team-card">
+                <div class="team-avatar">I</div>
+                <h3>Ishita</h3>
+                <p>Research, Testing &amp; Documentation</p>
+              </article>
+            </div>
+
+            
+          </section>
+
+          <section class="about-disclaimer">
+            <h2>💜 A Small but Important Note</h2>
+            <p>MindCare AI is an educational student project and a wellness-support prototype. It is not a medical service, therapist, or replacement for professional mental healthcare. If you are experiencing serious distress, please seek help from a qualified professional or someone you trust.</p>
+          </section>
+
+          <footer class="about-footer">
+            <p>Made with 💜 by the MindCare AI Team</p>
+            <p>Take a moment for yourself. You matter.</p>
+          </footer>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  <script src="{{ url_for('static', filename='voice.js') }}"></script>
+
+</body>
+</html>

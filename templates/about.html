@@ -1,0 +1,453 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8065dc">
+    <title>About Us | MindCare AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR: SAME AS HOMEPAGE -->
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+
+            <div class="brand">MindCare <span>AI</span></div>
+
+            <a href="{{ url_for('home') }}" class="primary-button"
+               style="display:block;text-align:center;text-decoration:none;">
+                ← Back to Chat
+            </a>
+
+            <a href="{{ url_for('home') }}" class="nav-button"
+               style="display:block;text-decoration:none;">
+                💬 Chat
+            </a>
+
+            <a href="{{ url_for('home') }}" class="nav-button"
+               style="display:block;text-decoration:none;">
+                📊 Dashboard
+            </a>
+
+            <a href="{{ url_for('home') }}" class="nav-button"
+               style="display:block;text-decoration:none;">
+                📔 Journal
+            </a>
+
+            <a href="{{ url_for('home') }}" class="nav-button"
+               style="display:block;text-decoration:none;">
+                🌿 Wellness Exercises
+            </a>
+
+            <a href="{{ url_for('home') }}" class="nav-button"
+               style="display:block;text-decoration:none;">
+                🎙️ Voice Chat
+            </a>
+
+            <a href="{{ url_for('about_page') }}"
+               class="nav-button about-nav-link"
+               style="display:block;text-decoration:none;">
+                ℹ️ About Us
+            </a>
+
+        </div>
+
+        <h3>ABOUT MINDCARE</h3>
+
+        <div class="muted" style="padding:0 12px;">
+            Learn about our project, features and team.
+        </div>
+
+        <p class="sidebar-note">
+            Your mental wellness matters. Take a moment for yourself. 💜
+        </p>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+
+        <!-- TOP HEADER: SAME STYLE AS HOMEPAGE -->
+        <header class="top-bar">
+
+            <div>
+                <div class="brand">MindCare <span>AI</span></div>
+                <p>Your mental wellness companion</p>
+            </div>
+
+            <div class="header-actions">
+
+                <a href="{{ url_for('home') }}"
+                   class="dashboard-button"
+                   style="text-decoration:none;">
+                    ← Back to Chat
+                </a>
+
+                <button type="button" id="theme-toggle"
+                        class="theme-toggle"
+                        aria-label="Switch theme">
+                    🌙
+                </button>
+
+                <div class="account-info">
+
+                    <div class="account-avatar">
+                        {{ session.get('user_name', 'U')[0]|upper }}
+                    </div>
+
+                    <div class="account-details">
+                        <strong>{{ session.get('user_name', 'User') }}</strong>
+                        <small>My Account</small>
+                    </div>
+
+                </div>
+
+                <form method="POST"
+                      action="{{ url_for('logout') }}"
+                      class="logout-form">
+
+                    <button type="submit" class="logout-button">
+                        <span>Log Out</span>
+                        ↗
+                    </button>
+
+                </form>
+
+            </div>
+
+        </header>
+
+
+        <!-- ABOUT PAGE CONTENT -->
+        <section class="view about-page">
+
+            <!-- HERO -->
+            <section class="about-hero">
+
+                <span class="about-tag">ABOUT OUR PROJECT</span>
+
+                <h1>
+                    Making Mental Wellness
+                    <span>More Accessible</span>
+                </h1>
+
+                <p>
+                    A safe, friendly and supportive digital space where
+                    people can express their thoughts, understand their
+                    emotions and take small steps towards better mental
+                    wellbeing.
+                </p>
+
+                <a href="{{ url_for('home') }}" class="about-cta">
+                    Explore MindCare AI →
+                </a>
+
+            </section>
+
+
+            <!-- WHO WE ARE -->
+            <section class="about-section">
+
+                <div class="about-section-heading">
+                    <span>01 — WHO WE ARE</span>
+                    <h2>What is MindCare AI?</h2>
+                </div>
+
+                <p>
+                    MindCare AI is an AI-powered mental wellness companion
+                    designed to provide users with a comfortable space
+                    to talk about their feelings, reflect on their
+                    experiences and explore everyday wellness activities.
+                </p>
+
+                <p>
+                    Our application combines conversational AI with
+                    useful self-reflection tools. It aims to make
+                    everyday emotional wellbeing support easier to
+                    access through a simple and user-friendly web
+                    experience.
+                </p>
+
+            </section>
+
+
+            <!-- MISSION AND VISION -->
+            <section class="about-two-columns">
+
+                <article class="about-info-card">
+
+                    <div class="about-card-icon">🎯</div>
+
+                    <h2>Our Mission</h2>
+
+                    <p>
+                        To encourage people to express themselves without
+                        hesitation and make emotional self-reflection a
+                        more approachable part of everyday life.
+                    </p>
+
+                </article>
+
+
+                <article class="about-info-card">
+
+                    <div class="about-card-icon">🌱</div>
+
+                    <h2>Our Vision</h2>
+
+                    <p>
+                        To create a future where digital technology can
+                        help people become more aware of their emotions
+                        and take positive steps towards their wellbeing.
+                    </p>
+
+                </article>
+
+            </section>
+
+
+            <!-- FEATURES -->
+            <section class="about-section">
+
+                <div class="about-section-heading">
+                    <span>02 — WHAT WE OFFER</span>
+                    <h2>Explore Our Features</h2>
+                    <p>Tools designed to support everyday mental wellness.</p>
+                </div>
+
+
+                <div class="about-features-grid">
+
+                    <article class="about-feature">
+                        <div>💬</div>
+                        <h3>AI Wellness Chat</h3>
+                        <p>
+                            Talk with an AI companion that responds
+                            with supportive and thoughtful conversation.
+                        </p>
+                    </article>
+
+
+                    <article class="about-feature">
+                        <div>🎙️</div>
+                        <h3>Voice Conversation</h3>
+                        <p>
+                            Interact through voice and choose between
+                            English and Hindi.
+                        </p>
+                    </article>
+
+
+                    <article class="about-feature">
+                        <div>📊</div>
+                        <h3>Mood Tracking</h3>
+                        <p>
+                            Record your daily mood and review your
+                            emotional patterns over time.
+                        </p>
+                    </article>
+
+
+                    <article class="about-feature">
+                        <div>📔</div>
+                        <h3>Personal Journal</h3>
+                        <p>
+                            Write down your thoughts, experiences
+                            and personal reflections.
+                        </p>
+                    </article>
+
+
+                    <article class="about-feature">
+                        <div>🌿</div>
+                        <h3>Wellness Exercises</h3>
+                        <p>
+                            Explore simple activities such as breathing
+                            exercises and relaxation practices.
+                        </p>
+                    </article>
+
+
+                    <article class="about-feature">
+                        <div>🔐</div>
+                        <h3>Personal Accounts</h3>
+                        <p>
+                            Create an account and access your own
+                            conversations and saved entries.
+                        </p>
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- TECHNOLOGY -->
+            <section class="about-section about-how">
+
+                <div class="about-section-heading">
+                    <span>03 — OUR TECHNOLOGY</span>
+                    <h2>How Does It Work?</h2>
+                </div>
+
+
+                <div class="about-tech-list">
+
+                    <div>
+                        <strong>Frontend</strong>
+                        <span>HTML, CSS and JavaScript</span>
+                    </div>
+
+                    <div>
+                        <strong>Backend</strong>
+                        <span>Python and Flask</span>
+                    </div>
+
+                    <div>
+                        <strong>AI Engine</strong>
+                        <span>Ollama with the Llama 3.2 model</span>
+                    </div>
+
+                    <div>
+                        <strong>Database</strong>
+                        <span>SQLite for account and application data</span>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- TEAM -->
+            <section class="about-section">
+
+                <div class="about-section-heading">
+                    <span>04 — THE PEOPLE BEHIND IT</span>
+                    <h2>Meet Our Team</h2>
+
+                    <p>
+                        Five people working together to bring
+                        MindCare AI to life.
+                    </p>
+                </div>
+
+
+                <div class="about-team-grid">
+
+                    <article class="about-team-card">
+                        <div class="team-avatar">A</div>
+                        <h3>Ayush</h3>
+                        <p>Project Lead & Backend Developer</p>
+                    </article>
+
+
+                    <article class="about-team-card">
+                        <div class="team-avatar">A</div>
+                        <h3>Anushka</h3>
+                        <p>UI/UX Designer & Frontend Developer</p>
+                    </article>
+
+
+                    <article class="about-team-card">
+                        <div class="team-avatar">P</div>
+                        <h3>Prachi</h3>
+                        <p>AI Integration & Chatbot Developer</p>
+                    </article>
+
+
+                    <article class="about-team-card">
+                        <div class="team-avatar">P</div>
+                        <h3>Poornima</h3>
+                        <p>Database & Authentication Developer</p>
+                    </article>
+
+
+                    <article class="about-team-card">
+                        <div class="team-avatar">I</div>
+                        <h3>Ishita</h3>
+                        <p>Research, Testing & Documentation</p>
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- DISCLAIMER -->
+            <section class="about-disclaimer">
+
+                <div>💜</div>
+
+                <h2>A Note About Mental Health</h2>
+
+                <p>
+                    MindCare AI is an educational and general wellness
+                    companion. It is not a substitute for a qualified
+                    mental health professional, medical advice, diagnosis
+                    or treatment. If you are experiencing serious
+                    distress, please seek help from a qualified
+                    professional.
+                </p>
+
+            </section>
+
+
+            <!-- FOOTER -->
+            <footer class="about-footer">
+
+                <div class="about-brand">
+                    MindCare <span>AI</span>
+                </div>
+
+                <p>
+                    Created with care, curiosity and a vision
+                    for better wellbeing.
+                </p>
+
+                <small>
+                    © 2026 MindCare AI. All rights reserved.
+                </small>
+
+            </footer>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- THEME SCRIPT -->
+<script>
+(function () {
+    const themeButton = document.getElementById("theme-toggle");
+
+    if (!themeButton) return;
+
+    function applyTheme(theme) {
+        document.documentElement.dataset.theme = theme;
+        document.body.dataset.theme = theme;
+        themeButton.textContent = theme === "dark" ? "☀️" : "🌙";
+    }
+
+    let savedTheme = localStorage.getItem("mindcare-theme") || "light";
+    applyTheme(savedTheme);
+
+    themeButton.addEventListener("click", function () {
+        savedTheme = savedTheme === "dark" ? "light" : "dark";
+        localStorage.setItem("mindcare-theme", savedTheme);
+        applyTheme(savedTheme);
+    });
+})();
+</script>
+
+</body>
+</html>

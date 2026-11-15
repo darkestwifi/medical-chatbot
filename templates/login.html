@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | MindCare AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <div class="auth-brand">MindCare <span>AI</span></div>
+    <p class="auth-subtitle">Your personal mental wellness space</p>
+
+    <h1>Welcome back 💜</h1>
+    <p>Log in to continue your wellness journey.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="auth-message {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('login') }}">
+      <label for="email">Email address</label>
+      <input id="email" name="email" type="email"
+             placeholder="you@example.com" autocomplete="email" required>
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password"
+             placeholder="Your password" autocomplete="current-password" required>
+
+      <button class="auth-submit" type="submit">Log In</button>
+    </form>
+
+    <p class="auth-switch">
+      New to MindCare AI?
+      <a href="{{ url_for('signup') }}">Create an account</a>
+    </p>
+
+    <p class="auth-footnote">MindCare AI is a wellness prototype, not a medical service.</p>
+  </main>
+</body>
+</html>
