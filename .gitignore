@@ -220,10 +220,11 @@ __marimo__/
 .streamlit/secrets.toml
 # MindCare AI private files
 .env.*
-!.env.example
+
 mindcare.db
 *.sqlite
 *.sqlite3
 
 # Python virtual environment
 .venv/
+.env.example
